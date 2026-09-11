@@ -1,0 +1,59 @@
+@model UBYS.Models.Fakulte
+@{
+    ViewData["Title"] = "Fakülte detayı";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body border-bottom">
+                <h5 class="mb-1">@Model.FakulteAd</h5>
+                <span class="text-muted small">@Model.FakulteAdres</span>
+            </div>
+
+            <div class="card-body border-bottom">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 fw-normal text-muted">Telefon</dt>
+                    <dd class="col-sm-8">@Model.FakulteTelefon</dd>
+                    <dt class="col-sm-4 fw-normal text-muted">E-posta</dt>
+                    <dd class="col-sm-8">@Model.FakulteEposta</dd>
+                    <dt class="col-sm-4 fw-normal text-muted">Kayıt tarihi</dt>
+                    <dd class="col-sm-8">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                </dl>
+            </div>
+
+            @* ⭐ Include ile gelen bölümler *@
+            <div class="card-body">
+                <h6 class="text-muted mb-3">Bölümler (@Model.Bolumler.Count)</h6>
+
+                @if (Model.Bolumler.Count == 0)
+                {
+                    <p class="text-muted small mb-0">Bu fakültede henüz bölüm yok.</p>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var bolum in Model.Bolumler)
+                        {
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>@bolum.BolumAdi</span>
+                                <span class="text-muted small">@bolum.BolumTelefon</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+
+            <div class="card-footer bg-white">
+                <a asp-action="Edit" asp-route-id="@Model.FakulteId" class="btn btn-primary btn-sm">
+                    <i class="bi bi-pencil"></i> Düzenle
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Listeye dön
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -313,6 +313,21 @@ public class UbysDbContext : DbContext
                 AktifMi = true
             }
         );
+
+        // ══════════════════════════════════════════════════════
+        //  GLOBAL QUERY FILTER — soft delete
+        //
+        //  Bu satırlardan sonra, bu tablolara yapılan HER sorguya
+        //  EF otomatik olarak "WHERE AktifMi = 1" ekler.
+        //
+        //  Artık .Where(f => f.AktifMi) yazmamıza gerek YOK.
+        //  Unutma riski de ortadan kalkıyor.
+        // ══════════════════════════════════════════════════════
+        modelBuilder.Entity<Fakulte>().HasQueryFilter(f => f.AktifMi);
+        modelBuilder.Entity<Bolum>().HasQueryFilter(b => b.AktifMi);
+        modelBuilder.Entity<Ogrenci>().HasQueryFilter(o => o.AktifMi);
+        modelBuilder.Entity<Akademisyen>().HasQueryFilter(a => a.AktifMi);
+        modelBuilder.Entity<Kullanici>().HasQueryFilter(k => k.AktifMi);
     }
 
     // ══════════════════════════════════════════════════════

@@ -1,0 +1,81 @@
+@model List<UBYS.Models.Bolum>
+@{
+    ViewData["Title"] = "Bölümler";
+}
+
+@if (TempData["Basarili"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle"></i> @TempData["Basarili"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Uyari"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show">
+        <i class="bi bi-exclamation-triangle"></i> @TempData["Uyari"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">Kayıtlı bölümler (@Model.Count)</span>
+        <a asp-action="Create" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg"></i> Yeni bölüm
+        </a>
+    </div>
+
+    <div class="card-body p-0">
+        @if (Model.Count == 0)
+        {
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                <p class="mb-3">Henüz bölüm yok. Önce en az bir fakülte oluşturun.</p>
+                <a asp-action="Create" class="btn btn-sm btn-primary">İlk bölümü ekle</a>
+            </div>
+        }
+        else
+        {
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Bölüm adı</th>
+                        <th>Fakülte</th>
+                        <th>Telefon</th>
+                        <th>E-posta</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bolum in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@bolum.BolumId" class="fw-semibold text-decoration-none">
+                                    @bolum.BolumAdi
+                                </a>
+                            </td>
+                            <td>
+                                @* ⭐ Include sayesinde nokta ile gidiyoruz.
+                                     ?. kullanıyoruz: Include unutulursa çökmesin, boş görünsün. *@
+                                <span class="badge bg-secondary">@bolum.Fakulte?.FakulteAd</span>
+                            </td>
+                            <td>@bolum.BolumTelefon</td>
+                            <td>@bolum.BolumEposta</td>
+                            <td class="text-end text-nowrap">
+                                <a asp-action="Edit" asp-route-id="@bolum.BolumId" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@bolum.BolumId" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

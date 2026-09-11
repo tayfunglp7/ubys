@@ -31,6 +31,38 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Bolum/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9sdW1cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Bolum/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9sdW1cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Fakulte/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdWx0ZVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Fakulte/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdWx0ZVxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Fakulte/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdWx0ZVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Fakulte/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdWx0ZVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Fakulte/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdWx0ZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Fakulte/Pasifler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdWx0ZVxQYXNpZmxlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

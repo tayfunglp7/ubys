@@ -1,0 +1,68 @@
+@model UBYS.Models.Fakulte
+@{
+    ViewData["Title"] = "Fakülteyi düzenle";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+
+                    @* ⭐ SADECE ID gizli alanı var.
+                       CreatedDate ve AktifMi'yi TAŞIMIYORUZ — çünkü
+                       controller onları veritabanından okuyor.
+                       ADO.NET sürümünde üç gizli alan vardı, burada bir tane. *@
+                    <input type="hidden" asp-for="FakulteId" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="FakulteAd" class="form-label"></label>
+                        <input asp-for="FakulteAd" class="form-control" />
+                        <span asp-validation-for="FakulteAd" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FakulteAdres" class="form-label"></label>
+                        <textarea asp-for="FakulteAdres" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="FakulteAdres" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FakulteTelefon" class="form-label"></label>
+                            <input asp-for="FakulteTelefon" class="form-control" />
+                            <span asp-validation-for="FakulteTelefon" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FakulteEposta" class="form-label"></label>
+                            <input asp-for="FakulteEposta" class="form-control" />
+                            <span asp-validation-for="FakulteEposta" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="text-muted small mb-3">
+                        <i class="bi bi-clock-history"></i>
+                        Kayıt: @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                        @if (Model.UpdatedDate.HasValue)
+                        {
+                            <span> | Güncelleme: @Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                        }
+                    </div>
+
+                    <hr />
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> Değişiklikleri kaydet
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

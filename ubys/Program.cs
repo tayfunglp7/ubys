@@ -17,8 +17,20 @@ builder.Services.AddControllersWithViews();
 //  Şimdi tek satır:
 // ══════════════════════════════════════════════════════════
 builder.Services.AddDbContext<UbysDbContext>(secenekler =>
+{
     secenekler.UseSqlServer(
-        builder.Configuration.GetConnectionString("UbysDb")));
+        builder.Configuration.GetConnectionString("UbysDb"));
+
+    // ⭐ Sadece GELİŞTİRME ortamında: üretilen SQL'i konsola yaz
+    if (builder.Environment.IsDevelopment())
+    {
+        secenekler.LogTo(Console.WriteLine, LogLevel.Information);
+
+        // Parametre DEĞERLERİNİ de göster
+        // ⚠️ Canlıda ASLA açma — şifreler, TC numaraları loglara düşer!
+        secenekler.EnableSensitiveDataLogging();
+    }
+});
 
 var app = builder.Build();
 

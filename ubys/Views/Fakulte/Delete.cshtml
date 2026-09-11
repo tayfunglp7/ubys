@@ -1,0 +1,52 @@
+@model UBYS.Models.Fakulte
+@{
+    ViewData["Title"] = "Fakülteyi sil";
+    int bolumSayisi = ViewBag.BolumSayisi ?? 0;
+}
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <i class="bi bi-exclamation-triangle"></i> Silme onayı
+            </div>
+            <div class="card-body">
+
+                <dl class="row mb-4">
+                    <dt class="col-sm-4">Fakülte adı</dt>
+                    <dd class="col-sm-8 fw-semibold">@Model.FakulteAd</dd>
+                    <dt class="col-sm-4">Telefon</dt>
+                    <dd class="col-sm-8">@Model.FakulteTelefon</dd>
+                    <dt class="col-sm-4">E-posta</dt>
+                    <dd class="col-sm-8">@Model.FakulteEposta</dd>
+                </dl>
+
+                @if (bolumSayisi > 0)
+                {
+                    <div class="alert alert-warning">
+                        <i class="bi bi-x-circle"></i>
+                        Bu fakültede <strong>@bolumSayisi bölüm</strong> var.
+                        Silmeden önce bölümleri kaldırmalısınız.
+                    </div>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
+                }
+                else
+                {
+                    <div class="alert alert-info small">
+                        Kayıt tamamen silinmez, pasif duruma alınır.
+                        "Pasifler" sayfasından geri getirilebilir.
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="FakulteId" name="id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Evet, sil
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+                    </form>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+@model UBYS.Models.Bolum
+@{
+    ViewData["Title"] = "Yeni bölüm";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="FakulteId" class="form-label"></label>
+                        <select asp-for="FakulteId" asp-items="ViewBag.Fakulteler" class="form-select">
+                            <option value="">-- Fakülte seçin --</option>
+                        </select>
+                        <span asp-validation-for="FakulteId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="BolumAdi" class="form-label"></label>
+                        <input asp-for="BolumAdi" class="form-control" />
+                        <span asp-validation-for="BolumAdi" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="BolumAdres" class="form-label"></label>
+                        <textarea asp-for="BolumAdres" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="BolumAdres" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="BolumTelefon" class="form-label"></label>
+                            <input asp-for="BolumTelefon" class="form-control" />
+                            <span asp-validation-for="BolumTelefon" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="BolumEposta" class="form-label"></label>
+                            <input asp-for="BolumEposta" class="form-control" placeholder="bolum@@okul.edu.tr" />
+                            <span asp-validation-for="BolumEposta" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> Bölümü kaydet
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
