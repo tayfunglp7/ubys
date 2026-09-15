@@ -83,4 +83,116 @@ public class BolumController : Controller
         TempData["Basarili"] = $"\"{bolum.BolumAdi}\" kaydedildi.";
         return RedirectToAction(nameof(Index));
     }
+
+    // ══════════════════════════════════════════════════════
+    //  4) DÜZENLEME FORMU
+    // ══════════════════════════════════════════════════════
+    public async Task<IActionResult> Edit(long id)
+    {
+        var bolum = await _db.Bolumler.FindAsync(id);
+
+        if (bolum == null)
+            return NotFound();
+
+        await FakulteListesiniHazirlaAsync(bolum.FakulteId);
+        return View(bolum);
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  5) DÜZENLEMEYİ KAYDET
+    // ══════════════════════════════════════════════════════
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(Bolum bolum)
+    {
+        if (!ModelState.IsValid)
+        {
+            await FakulteListesiniHazirlaAsync(bolum.FakulteId);
+            return View(bolum);
+        }
+
+        var mevcut = await _db.Bolumler.FindAsync(bolum.BolumId);
+
+        if (mevcut == null)
+            return NotFound();
+
+        mevcut.FakulteId = bolum.FakulteId;      // bölüm başka fakülteye taşınabilir
+        mevcut.BolumAdi = bolum.BolumAdi;
+        mevcut.BolumAdres = bolum.BolumAdres;
+        mevcut.BolumTelefon = bolum.BolumTelefon;
+        mevcut.BolumEposta = bolum.BolumEposta;
+        mevcut.UpdatedDate = DateTime.Now;
+
+        await _db.SaveChangesAsync();
+
+        TempData["Basarili"] = "Bölüm güncellendi.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  6) SİLME ONAY SAYFASI
+    // ══════════════════════════════════════════════════════
+    public async Task<IActionResult> Delete(long id)
+    {
+        var bolum = await _db.Bolumler
+            .Include(b => b.Fakulte)
+            .FirstOrDefaultAsync(b => b.BolumId == id);
+
+        if (bolum == null)
+            return NotFound();
+
+        // Bağlı kayıt sayıları — kullanıcıya önceden göster
+        ViewBag.OgrenciSayisi = await _db.Ogrenciler.CountAsync(o => o.BolumId == id);
+        ViewBag.AkademisyenSayisi = await _db.Akademisyenler.CountAsync(a => a.BolumId == id);
+
+        return View(bolum);
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  7) SİLMEYİ ONAYLA
+    // ══════════════════════════════════════════════════════
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(long id)
+    {
+        var bolum = await _db.Bolumler.FindAsync(id);
+
+        if (bolum == null)
+            return NotFound();
+
+        int ogrenciSayisi = await _db.Ogrenciler.CountAsync(o => o.BolumId == id);
+        int akademisyenSayisi = await _db.Akademisyenler.CountAsync(a => a.BolumId == id);
+
+        if (ogrenciSayisi > 0 || akademisyenSayisi > 0)
+        {
+            TempData["Uyari"] = $"Bu bölümde {ogrenciSayisi} öğrenci ve " +
+                                $"{akademisyenSayisi} akademisyen var. Önce onları taşıyın.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        bolum.AktifMi = false;
+        bolum.UpdatedDate = DateTime.Now;
+        await _db.SaveChangesAsync();
+
+        TempData["Basarili"] = "Bölüm silindi.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  8) DETAY
+    // ══════════════════════════════════════════════════════
+    public async Task<IActionResult> Details(long id)
+    {
+        // ⭐ Üç seviyeli yükleme: bölüm + fakültesi + öğrencileri + akademisyenleri
+        var bolum = await _db.Bolumler
+            .Include(b => b.Fakulte)
+            .Include(b => b.Ogrenciler)
+            .Include(b => b.Akademisyenler)
+            .FirstOrDefaultAsync(b => b.BolumId == id);
+
+        if (bolum == null)
+            return NotFound();
+
+        return View(bolum);
+    }
 }

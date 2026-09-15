@@ -1,0 +1,92 @@
+@model UBYS.Models.Bolum
+@{
+    ViewData["Title"] = "Bölüm detayı";
+}
+
+<div class="row">
+    <div class="col-lg-9">
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body border-bottom">
+                <h5 class="mb-1">@Model.BolumAdi</h5>
+                <span class="badge bg-secondary">@Model.Fakulte?.FakulteAd</span>
+            </div>
+
+            <div class="card-body border-bottom">
+                <dl class="row mb-0">
+                    <dt class="col-sm-3 fw-normal text-muted">Adres</dt>
+                    <dd class="col-sm-9">@Model.BolumAdres</dd>
+                    <dt class="col-sm-3 fw-normal text-muted">Telefon</dt>
+                    <dd class="col-sm-9">@Model.BolumTelefon</dd>
+                    <dt class="col-sm-3 fw-normal text-muted">E-posta</dt>
+                    <dd class="col-sm-9">@Model.BolumEposta</dd>
+                </dl>
+            </div>
+
+            <div class="row g-0">
+
+                @* ⭐ Include ile gelen öğrenciler *@
+                <div class="col-md-6 border-end">
+                    <div class="card-body">
+                        <h6 class="text-muted mb-3">
+                            Öğrenciler (@Model.Ogrenciler.Count)
+                        </h6>
+
+                        @if (Model.Ogrenciler.Count == 0)
+                        {
+                            <p class="text-muted small mb-0">Kayıtlı öğrenci yok.</p>
+                        }
+                        else
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var o in Model.Ogrenciler.OrderBy(x => x.OgrenciAd))
+                                {
+                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                        <span class="small">@o.TamAd</span>
+                                        <span class="badge bg-info">@o.OgrenciSinif. sınıf</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+
+                @* ⭐ Include ile gelen akademisyenler *@
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h6 class="text-muted mb-3">
+                            Akademisyenler (@Model.Akademisyenler.Count)
+                        </h6>
+
+                        @if (Model.Akademisyenler.Count == 0)
+                        {
+                            <p class="text-muted small mb-0">Kayıtlı akademisyen yok.</p>
+                        }
+                        else
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var a in Model.Akademisyenler.OrderBy(x => x.AkademisyenAd))
+                                {
+                                    <li class="list-group-item px-0">
+                                        <span class="small">@a.TamAd</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-footer bg-white">
+                <a asp-action="Edit" asp-route-id="@Model.BolumId" class="btn btn-primary btn-sm">
+                    <i class="bi bi-pencil"></i> Düzenle
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Listeye dön
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

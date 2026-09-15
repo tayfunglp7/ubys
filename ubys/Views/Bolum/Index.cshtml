@@ -65,6 +65,9 @@
                             <td>@bolum.BolumTelefon</td>
                             <td>@bolum.BolumEposta</td>
                             <td class="text-end text-nowrap">
+                                <a asp-action="Details" asp-route-id="@bolum.BolumId" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
                                 <a asp-action="Edit" asp-route-id="@bolum.BolumId" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>

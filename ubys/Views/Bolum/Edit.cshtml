@@ -1,0 +1,75 @@
+@model UBYS.Models.Bolum
+@{
+    ViewData["Title"] = "Bölümü düzenle";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+
+                    @* Sadece id — diğer sistem alanlarını controller okuyor *@
+                    <input type="hidden" asp-for="BolumId" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="FakulteId" class="form-label"></label>
+                        @* Controller'da FakulteListesiniHazirlaAsync(bolum.FakulteId)
+                           çağrıldığı için mevcut fakülte seçili gelir *@
+                        <select asp-for="FakulteId" asp-items="ViewBag.Fakulteler" class="form-select">
+                            <option value="">-- Fakülte seçin --</option>
+                        </select>
+                        <span asp-validation-for="FakulteId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="BolumAdi" class="form-label"></label>
+                        <input asp-for="BolumAdi" class="form-control" />
+                        <span asp-validation-for="BolumAdi" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="BolumAdres" class="form-label"></label>
+                        <textarea asp-for="BolumAdres" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="BolumAdres" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="BolumTelefon" class="form-label"></label>
+                            <input asp-for="BolumTelefon" class="form-control" />
+                            <span asp-validation-for="BolumTelefon" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="BolumEposta" class="form-label"></label>
+                            <input asp-for="BolumEposta" class="form-control" />
+                            <span asp-validation-for="BolumEposta" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="text-muted small mb-3">
+                        <i class="bi bi-clock-history"></i>
+                        Kayıt: @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                        @if (Model.UpdatedDate.HasValue)
+                        {
+                            <span> | Güncelleme: @Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                        }
+                    </div>
+
+                    <hr />
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> Değişiklikleri kaydet
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

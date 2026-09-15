@@ -1,0 +1,56 @@
+@model UBYS.Models.Bolum
+@{
+    ViewData["Title"] = "Bölümü sil";
+    int ogrenciSayisi = ViewBag.OgrenciSayisi ?? 0;
+    int akademisyenSayisi = ViewBag.AkademisyenSayisi ?? 0;
+    bool silinebilir = (ogrenciSayisi == 0 && akademisyenSayisi == 0);
+}
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <i class="bi bi-exclamation-triangle"></i> Silme onayı
+            </div>
+            <div class="card-body">
+
+                <dl class="row mb-4">
+                    <dt class="col-sm-4">Bölüm adı</dt>
+                    <dd class="col-sm-8 fw-semibold">@Model.BolumAdi</dd>
+                    <dt class="col-sm-4">Fakülte</dt>
+                    <dd class="col-sm-8">@Model.Fakulte?.FakulteAd</dd>
+                    <dt class="col-sm-4">Telefon</dt>
+                    <dd class="col-sm-8">@Model.BolumTelefon</dd>
+                    <dt class="col-sm-4">E-posta</dt>
+                    <dd class="col-sm-8">@Model.BolumEposta</dd>
+                </dl>
+
+                @if (!silinebilir)
+                {
+                    <div class="alert alert-warning">
+                        <i class="bi bi-x-circle"></i>
+                        Bu bölümde <strong>@ogrenciSayisi öğrenci</strong> ve
+                        <strong>@akademisyenSayisi akademisyen</strong> kayıtlı.
+                        Silmeden önce onları başka bölüme taşımalısınız.
+                    </div>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
+                }
+                else
+                {
+                    <div class="alert alert-info small">
+                        Kayıt tamamen silinmez, pasif duruma alınır.
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="BolumId" name="id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Evet, sil
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+                    </form>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

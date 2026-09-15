@@ -1,0 +1,123 @@
+@model UBYS.Models.Ogrenci
+@{
+    ViewData["Title"] = "Öğrenciyi düzenle";
+}
+
+<div class="row">
+    <div class="col-lg-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+
+                    @* Sadece id. CreatedDate ve AktifMi'yi taşımıyoruz —
+                       controller onları veritabanından okuyor. *@
+                    <input type="hidden" asp-for="OgrenciId" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <h6 class="text-muted mb-3">Kişisel bilgiler</h6>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="OgrenciAd" class="form-label"></label>
+                            <input asp-for="OgrenciAd" class="form-control" />
+                            <span asp-validation-for="OgrenciAd" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="OgrenciSoyad" class="form-label"></label>
+                            <input asp-for="OgrenciSoyad" class="form-control" />
+                            <span asp-validation-for="OgrenciSoyad" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="OgrenciDogumTarihi" class="form-label"></label>
+                            <input asp-for="OgrenciDogumTarihi" type="date" class="form-control" />
+                            <span asp-validation-for="OgrenciDogumTarihi" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Cinsiyet</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" asp-for="OgrenciCinsiyet" value="Kadın"
+                                           id="cinsiyetK" />
+                                    <label class="form-check-label" for="cinsiyetK">Kadın</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" asp-for="OgrenciCinsiyet" value="Erkek"
+                                           id="cinsiyetE" />
+                                    <label class="form-check-label" for="cinsiyetE">Erkek</label>
+                                </div>
+                            </div>
+                            <span asp-validation-for="OgrenciCinsiyet" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="OgrenciSinif" class="form-label"></label>
+                            <input asp-for="OgrenciSinif" type="number" min="1" max="6" class="form-control" />
+                            <span asp-validation-for="OgrenciSinif" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="OgrenciTc" class="form-label"></label>
+                        <input asp-for="OgrenciTc" class="form-control" maxlength="11" />
+                        <span asp-validation-for="OgrenciTc" class="text-danger small"></span>
+                    </div>
+
+                    <hr class="my-4" />
+                    <h6 class="text-muted mb-3">Kayıt ve iletişim bilgileri</h6>
+
+                    <div class="mb-3">
+                        <label asp-for="BolumId" class="form-label"></label>
+                        <select asp-for="BolumId" asp-items="ViewBag.Bolumler" class="form-select">
+                            <option value="">-- Bölüm seçin --</option>
+                        </select>
+                        <span asp-validation-for="BolumId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="OgrenciAdres" class="form-label"></label>
+                        <textarea asp-for="OgrenciAdres" class="form-control" rows="2"></textarea>
+                        <span asp-validation-for="OgrenciAdres" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="OgrenciTelefon" class="form-label"></label>
+                            <input asp-for="OgrenciTelefon" class="form-control" />
+                            <span asp-validation-for="OgrenciTelefon" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="OgrenciEposta" class="form-label"></label>
+                            <input asp-for="OgrenciEposta" class="form-control" />
+                            <span asp-validation-for="OgrenciEposta" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="text-muted small mb-3">
+                        <i class="bi bi-clock-history"></i>
+                        Kayıt: @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                        @if (Model.UpdatedDate.HasValue)
+                        {
+                            <span> | Güncelleme: @Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                        }
+                    </div>
+
+                    <hr />
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> Değişiklikleri kaydet
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
