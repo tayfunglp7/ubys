@@ -94,19 +94,93 @@ public class OgrenciController : Controller
         }
     }
 
+
     // ══════════════════════════════════════════════════════
-    //  1) LİSTELEME
+    //  LİSTELEME + ARAMA + FİLTRE + SAYFALAMA
+    //  GET: /Ogrenci?arama=ayse&bolumId=1&sinif=3&sayfa=2
     // ══════════════════════════════════════════════════════
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(
+        string? arama,
+        long? bolumId,
+        int? sinif,
+        int sayfa = 1)
     {
-        var ogrenciler = await _db.Ogrenciler
-            .Include(o => o.Bolum)                    // bölüm
-                .ThenInclude(b => b!.Fakulte)         // ⭐ bölümün fakültesi
+        const int sayfaBoyutu = 4;
+
+        // Kullanıcı adres çubuğuna sayfa=0 veya sayfa=-5 yazabilir
+        if (sayfa < 1) sayfa = 1;
+
+        // ══════════════════════════════════════════════════
+        //  1) SORGUYU PARÇA PARÇA KUR
+        //
+        //  ⭐ Bu satırların HİÇBİRİ veritabanına gitmez.
+        //     Sadece "ne isteyeceğimizin tarifi" hazırlanır.
+        // ══════════════════════════════════════════════════
+        IQueryable<Ogrenci> sorgu = _db.Ogrenciler
+            .Include(o => o.Bolum)
+                .ThenInclude(b => b!.Fakulte);
+
+        if (!string.IsNullOrWhiteSpace(arama))
+        {
+            string temizArama = arama.Trim();
+
+            // Ad, soyad, e-posta veya TC içinde ara
+            sorgu = sorgu.Where(o =>
+                o.OgrenciAd.Contains(temizArama) ||
+                o.OgrenciSoyad.Contains(temizArama) ||
+                o.OgrenciEposta.Contains(temizArama) ||
+                o.OgrenciTc.Contains(temizArama));
+        }
+
+        if (bolumId.HasValue && bolumId.Value > 0)
+            sorgu = sorgu.Where(o => o.BolumId == bolumId.Value);
+
+        if (sinif.HasValue && sinif.Value > 0)
+            sorgu = sorgu.Where(o => o.OgrenciSinif == sinif.Value);
+
+        // ══════════════════════════════════════════════════
+        //  2) TOPLAM KAYIT SAYISI
+        //
+        //  ⚠️ Bu satır veritabanına GİDER (COUNT sorgusu).
+        //     Sayfa sayısını hesaplamak için gerekli — sayfalanmış
+        //     sonuçtan toplam sayıyı çıkaramayız.
+        //
+        //  Not: Include'lar COUNT sorgusuna dâhil edilmez,
+        //       EF gereksiz JOIN'leri kendisi atar.
+        // ══════════════════════════════════════════════════
+        int toplamKayit = await sorgu.CountAsync();
+
+        // ══════════════════════════════════════════════════
+        //  3) SAYFAYI GETİR
+        //
+        //  ⚠️ SIRA ÖNEMLİ: OrderBy → Skip → Take
+        // ══════════════════════════════════════════════════
+        var liste = await sorgu
             .OrderBy(o => o.OgrenciAd)
             .ThenBy(o => o.OgrenciSoyad)
+            .Skip((sayfa - 1) * sayfaBoyutu)
+            .Take(sayfaBoyutu)
             .ToListAsync();
 
-        return View(ogrenciler);
+        // ══════════════════════════════════════════════════
+        //  4) SAYFALAMA BİLGİLERİ
+        //
+        //  (double) dönüşümü ŞART:
+        //  47 / 10 = 4  (tam sayı bölmesi)  → 5. sayfa kaybolur
+        //  47.0 / 10 = 4.7 → Ceiling → 5    ✅
+        // ══════════════════════════════════════════════════
+        ViewBag.Sayfa = sayfa;
+        ViewBag.ToplamSayfa = (int)Math.Ceiling((double)toplamKayit / sayfaBoyutu);
+        ViewBag.ToplamKayit = toplamKayit;
+
+        // Filtre değerlerini geri gönder — form dolu kalsın
+        ViewBag.Arama = arama;
+        ViewBag.SeciliBolum = bolumId;
+        ViewBag.SeciliSinif = sinif;
+
+        await BolumListesiniHazirlaAsync(bolumId);
+
+        return View(liste);
     }
 
     // ══════════════════════════════════════════════════════

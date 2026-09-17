@@ -1,0 +1,87 @@
+@model UBYS.Models.Akademisyen
+@{
+    ViewData["Title"] = "Akademisyen detayı";
+
+    int yas = DateTime.Today.Year - Model.AkademisyenDogumTarihi.Year;
+    if (Model.AkademisyenDogumTarihi.Date > DateTime.Today.AddYears(-yas))
+        yas--;
+
+    string basHarfler = "";
+    if (Model.AkademisyenAd.Length > 0) basHarfler += Model.AkademisyenAd[0];
+    if (Model.AkademisyenSoyad.Length > 0) basHarfler += Model.AkademisyenSoyad[0];
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body border-bottom">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-info text-white d-flex
+                        align-items-center justify-content-center fw-bold"
+                         style="width: 56px; height: 56px; font-size: 1.25rem;">
+                        @basHarfler.ToUpper()
+                    </div>
+                    <div>
+                        <h5 class="mb-1">@Model.TamAd</h5>
+                        <span class="badge bg-secondary">@Model.Bolum?.BolumAdi</span>
+                        <div class="text-muted small mt-1">@Model.Bolum?.Fakulte?.FakulteAd</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <h6 class="text-muted mb-3">Kişisel bilgiler</h6>
+                <dl class="row mb-4">
+                    <dt class="col-sm-4 fw-normal text-muted">Unvan</dt>
+                    <dd class="col-sm-8">
+                        @* Unvan NULL olabilir *@
+                        @(string.IsNullOrWhiteSpace(Model.Unvan) ? "—" : Model.Unvan)
+                    </dd>
+                    <dt class="col-sm-4 fw-normal text-muted">TC kimlik no</dt>
+                    <dd class="col-sm-8">@Model.AkademisyenTc</dd>
+                    <dt class="col-sm-4 fw-normal text-muted">Doğum tarihi</dt>
+                    <dd class="col-sm-8">
+                        @Model.AkademisyenDogumTarihi.ToString("dd MMMM yyyy")
+                        <span class="text-muted">(@yas yaşında)</span>
+                    </dd>
+                    <dt class="col-sm-4 fw-normal text-muted">Cinsiyet</dt>
+                    <dd class="col-sm-8">@Model.AkademisyenCinsiyet</dd>
+                </dl>
+
+                <h6 class="text-muted mb-3">İletişim</h6>
+                <dl class="row mb-4">
+                    <dt class="col-sm-4 fw-normal text-muted">Telefon</dt>
+                    <dd class="col-sm-8">@Model.AkademisyenTelefon</dd>
+                    <dt class="col-sm-4 fw-normal text-muted">E-posta</dt>
+                    <dd class="col-sm-8">@Model.AkademisyenEposta</dd>
+                    <dt class="col-sm-4 fw-normal text-muted">Adres</dt>
+                    <dd class="col-sm-8">@Model.AkademisyenAdres</dd>
+                </dl>
+
+                <h6 class="text-muted mb-3">Kayıt bilgileri</h6>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 fw-normal text-muted">Kayıt tarihi</dt>
+                    <dd class="col-sm-8">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                    <dt class="col-sm-4 fw-normal text-muted">Son güncelleme</dt>
+                    <dd class="col-sm-8">
+                        @(Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm") ?? "Henüz güncellenmemiş")
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="card-footer bg-white">
+                <a asp-action="Edit" asp-route-id="@Model.AkademisyenId" class="btn btn-primary btn-sm">
+                    <i class="bi bi-pencil"></i> Düzenle
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.AkademisyenId" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-trash"></i> Sil
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Listeye dön
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

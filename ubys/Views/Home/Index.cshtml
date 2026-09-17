@@ -1,8 +1,242 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model UBYS.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Panel";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@* ═══════════ ÜST KARTLAR ═══════════ *@
+<div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <a asp-controller="Fakulte" asp-action="Index" class="text-decoration-none">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Fakülte</div>
+                        <div class="fs-3 fw-bold text-dark">@Model.FakulteSayisi</div>
+                    </div>
+                    <i class="bi bi-building fs-1 text-primary opacity-25"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a asp-controller="Bolum" asp-action="Index" class="text-decoration-none">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Bölüm</div>
+                        <div class="fs-3 fw-bold text-dark">@Model.BolumSayisi</div>
+                    </div>
+                    <i class="bi bi-diagram-3 fs-1 text-success opacity-25"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a asp-controller="Ogrenci" asp-action="Index" class="text-decoration-none">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Öğrenci</div>
+                        <div class="fs-3 fw-bold text-dark">@Model.OgrenciSayisi</div>
+                    </div>
+                    <i class="bi bi-people fs-1 text-warning opacity-25"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a asp-controller="Akademisyen" asp-action="Index" class="text-decoration-none">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Akademisyen</div>
+                        <div class="fs-3 fw-bold text-dark">@Model.AkademisyenSayisi</div>
+                    </div>
+                    <i class="bi bi-person-badge fs-1 text-info opacity-25"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+
+<div class="row g-3 mb-3">
+
+    @* ═══════════ BÖLÜM DAĞILIMI ═══════════ *@
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold">Bölümlere göre dağılım</div>
+            <div class="card-body p-0">
+
+                @if (Model.BolumDagilimlari.Count == 0)
+                {
+                    <p class="text-muted small p-3 mb-0">Henüz bölüm kaydı yok.</p>
+                }
+                else
+                {
+                    
+                        // Çubukları en kalabalık bölüme göre ölçekleyeceğiz.
+                        // ⚠️ Sıfıra bölme koruması: hiç öğrenci yoksa 0 olur.
+                        int enYuksek = Model.BolumDagilimlari.Max(b => b.OgrenciSayisi);
+                        if (enYuksek == 0) enYuksek = 1;
+                    
+
+                    <table class="table table-sm mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Bölüm</th>
+                                <th>Fakülte</th>
+                                <th class="text-center">Öğrenci</th>
+                                <th class="text-center">Akademisyen</th>
+                                <th style="width: 28%;">Doluluk</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var b in Model.BolumDagilimlari)
+                            {
+                                int yuzde = (b.OgrenciSayisi * 100) / enYuksek;
+                                <tr>
+                                    <td class="fw-semibold">@b.BolumAdi</td>
+                                    <td class="text-muted small">@b.FakulteAd</td>
+                                    <td class="text-center">@b.OgrenciSayisi</td>
+                                    <td class="text-center">@b.AkademisyenSayisi</td>
+                                    <td>
+                                        @* Çubuk grafik — sadece CSS, kütüphane yok *@
+                                        <div class="progress" style="height: 8px;">
+                                            <div class="progress-bar bg-primary" style="width: @yuzde%;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    @* ═══════════ SINIF DAĞILIMI ═══════════ *@
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold">Sınıflara göre öğrenci</div>
+            <div class="card-body">
+
+                @if (Model.SinifDagilimlari.Count == 0)
+                {
+                    <p class="text-muted small mb-0">Henüz öğrenci kaydı yok.</p>
+                }
+                else
+                {
+                    @foreach (var s in Model.SinifDagilimlari)
+                    {
+                        int yuzde = Model.OgrenciSayisi > 0
+                            ? (s.OgrenciSayisi * 100) / Model.OgrenciSayisi
+                            : 0;
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span>@s.Sinif. sınıf</span>
+                                <span class="text-muted">@s.OgrenciSayisi kişi (%@yuzde)</span>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-warning" style="width: @yuzde%;"></div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row g-3">
+
+    @* ═══════════ CİNSİYET DAĞILIMI ═══════════ *@
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold">Cinsiyet dağılımı</div>
+            <div class="card-body">
+
+                @if (Model.CinsiyetDagilimlari.Count == 0)
+                {
+                    <p class="text-muted small mb-0">Henüz öğrenci kaydı yok.</p>
+                }
+                else
+                {
+                    @* Tek çubukta iki renk: aynı .progress içine iki .progress-bar *@
+                    <div class="progress mb-3" style="height: 20px;">
+                        @foreach (var c in Model.CinsiyetDagilimlari)
+                        {
+                            int yuzde = Model.OgrenciSayisi > 0
+                                ? (c.OgrenciSayisi * 100) / Model.OgrenciSayisi
+                                : 0;
+                            string renk = c.Cinsiyet == "Kadın" ? "bg-danger" : "bg-primary";
+
+                            <div class="progress-bar @renk" style="width: @yuzde%;">%@yuzde</div>
+                        }
+                    </div>
+
+                    @foreach (var c in Model.CinsiyetDagilimlari)
+                    {
+                        string nokta = c.Cinsiyet == "Kadın" ? "text-danger" : "text-primary";
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span>
+                                <i class="bi bi-circle-fill @nokta" style="font-size: .5rem;"></i>
+                                @c.Cinsiyet
+                            </span>
+                            <span class="text-muted">@c.OgrenciSayisi</span>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+
+    @* ═══════════ SON EKLENENLER ═══════════ *@
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold">Son eklenen öğrenciler</div>
+            <div class="card-body p-0">
+
+                @if (Model.SonEklenenOgrenciler.Count == 0)
+                {
+                    <p class="text-muted small p-3 mb-0">Henüz öğrenci kaydı yok.</p>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var o in Model.SonEklenenOgrenciler)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a asp-controller="Ogrenci" asp-action="Details" asp-route-id="@o.OgrenciId"
+                                       class="text-decoration-none fw-semibold small">
+                                        @o.TamAd
+                                    </a>
+                                    <div class="text-muted" style="font-size: .75rem;">
+                                        @o.BolumAdi &middot; @o.Sinif. sınıf
+                                    </div>
+                                </div>
+                                <span class="text-muted" style="font-size: .75rem;">
+                                    @o.CreatedDate.ToString("dd.MM.yyyy")
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                }
+
+            </div>
+        </div>
+    </div>
+
 </div>

@@ -3,6 +3,54 @@
     ViewData["Title"] = "Öğrenciler";
 }
 
+<div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+
+        @* ⭐ method="get" — POST DEĞİL!
+           Sebep: arama sonuçları paylaşılabilir ve yer imine eklenebilir olmalı.
+           Adres çubuğunda /Ogrenci?arama=ayse&sinif=3 görünür.
+           Genel kural: arama = GET, kaydetme = POST *@
+        <form method="get" asp-action="Index" class="row g-2 align-items-end">
+
+            <div class="col-md-4">
+                <label class="form-label small text-muted">Ara</label>
+                <input type="text" name="arama" value="@ViewBag.Arama" class="form-control form-control-sm"
+                       placeholder="Ad, soyad, e-posta veya TC" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label small text-muted">Bölüm</label>
+                <select name="bolumId" asp-items="ViewBag.Bolumler" class="form-select form-select-sm">
+                    <option value="">Tüm bölümler</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label small text-muted">Sınıf</label>
+                <select name="sinif" class="form-select form-select-sm">
+                    <option value="">Tümü</option>
+                    @for (int i = 1; i <= 6; i++)
+                    {
+                        <option value="@i" selected="@(ViewBag.SeciliSinif as int? == i)">
+                            @i. sınıf
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="bi bi-search"></i> Ara
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Temizle</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
 @if (TempData["Basarili"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show">
@@ -83,9 +131,6 @@
                                 <div class="text-muted">@o.OgrenciEposta</div>
                             </td>
                             <td class="text-end text-nowrap">
-                                <a asp-action="Details" asp-route-id="@o.OgrenciId" class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-eye"></i>
-                                </a>
                                 <a asp-action="Edit" asp-route-id="@o.OgrenciId" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
@@ -97,6 +142,50 @@
                     }
                 </tbody>
             </table>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+
+                <div class="text-muted small">
+                    Toplam <strong>@ViewBag.ToplamKayit</strong> kayıt
+                    @if (ViewBag.ToplamSayfa > 0)
+                    {
+                        <span>| Sayfa @ViewBag.Sayfa / @ViewBag.ToplamSayfa</span>
+                    }
+                </div>
+
+                @if (ViewBag.ToplamSayfa > 1)
+                {
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+
+                            @* ── Önceki ── *@
+                            <li class="page-item @(ViewBag.Sayfa == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-arama="@ViewBag.Arama"
+                                   asp-route-bolumId="@ViewBag.SeciliBolum" asp-route-sinif="@ViewBag.SeciliSinif"
+                                   asp-route-sayfa="@(ViewBag.Sayfa - 1)">‹</a>
+                            </li>
+
+                            @* ── Sayfa numaraları ── *@
+                            @for (int i = 1; i <= ViewBag.ToplamSayfa; i++)
+                            {
+                                <li class="page-item @(i == ViewBag.Sayfa ? "active" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-arama="@ViewBag.Arama"
+                                       asp-route-bolumId="@ViewBag.SeciliBolum" asp-route-sinif="@ViewBag.SeciliSinif"
+                                       asp-route-sayfa="@i">@i</a>
+                                </li>
+                            }
+
+                            @* ── Sonraki ── *@
+                            <li class="page-item @(ViewBag.Sayfa == ViewBag.ToplamSayfa ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-arama="@ViewBag.Arama"
+                                   asp-route-bolumId="@ViewBag.SeciliBolum" asp-route-sinif="@ViewBag.SeciliSinif"
+                                   asp-route-sayfa="@(ViewBag.Sayfa + 1)">›</a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                }
+            </div>
         }
     </div>
 </div>

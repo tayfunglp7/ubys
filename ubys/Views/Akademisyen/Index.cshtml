@@ -1,0 +1,99 @@
+@model List<UBYS.Models.Akademisyen>
+@{
+    ViewData["Title"] = "Akademisyenler";
+}
+
+@if (TempData["Basarili"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle"></i> @TempData["Basarili"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">Kayıtlı akademisyenler (@Model.Count)</span>
+        <div>
+            <a asp-action="CsvIndir" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-download"></i> CSV
+            </a>
+            <a asp-action="Create" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg"></i> Yeni akademisyen
+            </a>
+        </div>
+    </div>
+
+    <div class="card-body p-0">
+        @if (Model.Count == 0)
+        {
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                <p class="mb-3">Henüz akademisyen yok.</p>
+                <a asp-action="Create" class="btn btn-sm btn-primary">İlk kaydı ekle</a>
+            </div>
+        }
+        else
+        {
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Ad soyad</th>
+                        <th>Bölüm</th>
+                        <th>Fakülte</th>
+                        <th class="text-center">Yaş</th>
+                        <th>TC</th>
+                        <th>İletişim</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model)
+                    {
+
+                        int yas = DateTime.Today.Year - a.AkademisyenDogumTarihi.Year;
+                        if (a.AkademisyenDogumTarihi.Date > DateTime.Today.AddYears(-yas))
+                            yas--;
+
+                        string tcMaskeli = a.AkademisyenTc.Length >= 3
+                            ? a.AkademisyenTc.Substring(0, 3) + "********"
+                            : "***********";
+
+                        
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@a.AkademisyenId"
+                                   class="fw-semibold text-decoration-none">
+                                    @a.TamAd
+                                </a>
+                                <div class="text-muted small">@a.AkademisyenCinsiyet</div>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">@a.Bolum?.BolumAdi</span>
+                            </td>
+                            <td class="small text-muted">@a.Bolum?.Fakulte?.FakulteAd</td>
+                            <td class="text-center">@yas</td>
+                            <td><code class="small">@tcMaskeli</code></td>
+                            <td class="small">
+                                <div>@a.AkademisyenTelefon</div>
+                                <div class="text-muted">@a.AkademisyenEposta</div>
+                            </td>
+                            <td class="text-end text-nowrap">
+                                <a asp-action="Details" asp-route-id="@a.AkademisyenId"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@a.AkademisyenId" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@a.AkademisyenId" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

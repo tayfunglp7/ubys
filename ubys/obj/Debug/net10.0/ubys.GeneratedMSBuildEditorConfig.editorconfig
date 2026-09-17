@@ -31,6 +31,26 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Akademisyen/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWthZGVtaXN5ZW5cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Akademisyen/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWthZGVtaXN5ZW5cRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Akademisyen/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWthZGVtaXN5ZW5cRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Akademisyen/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWthZGVtaXN5ZW5cRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Akademisyen/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWthZGVtaXN5ZW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/tayfu/OneDrive/Belgeler/dev/ubys/ubys/Views/Bolum/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9sdW1cQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
