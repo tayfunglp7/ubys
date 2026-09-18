@@ -315,6 +315,28 @@ public class UbysDbContext : DbContext
         );
 
         // ══════════════════════════════════════════════════════
+        //  ADMIN HESABI
+        //
+        //  Kullanıcı adı: admin
+        //  Şifre        : ubys123
+        //
+        //  ⚠️ Hash'i SifreYardimcisi.Hashle("ubys123") ile
+        //     üretip buraya yazacağız. Sabit olmak zorunda —
+        //     seed verisi migration'a gömülür.
+        // ══════════════════════════════════════════════════════
+        modelBuilder.Entity<Kullanici>().HasData(
+            new Kullanici
+            {
+                KullaniciId = 1,
+                KullaniciAdi = "admin",
+                SifreHash = SifreYardimcisi.Hashle("ubys123"),
+                AdSoyad = "Sistem Yöneticisi",
+                CreatedDate = sabitTarih,     // Modül 2'de tanımladığımız değişken
+                AktifMi = true
+            }
+        );
+
+        // ══════════════════════════════════════════════════════
         //  GLOBAL QUERY FILTER — soft delete
         //
         //  Bu satırlardan sonra, bu tablolara yapılan HER sorguya

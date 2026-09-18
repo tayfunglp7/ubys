@@ -87,18 +87,59 @@ public class AkademisyenController : Controller
     // ══════════════════════════════════════════════════════
     //  1) LİSTELEME
     // ══════════════════════════════════════════════════════
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(
+        string? arama,
+        long? bolumId,
+        int? unvan,
+        int sayfa = 1)
     {
-        var akademisyenler = await _db.Akademisyenler
+        const int sayfaBoyutu = 10;
+
+        if (sayfa < 1) sayfa = 1;
+
+        IQueryable<Akademisyen> sorgu = _db.Akademisyenler
             .Include(a => a.Bolum)
-                .ThenInclude(b => b!.Fakulte)
+                .ThenInclude(b => b!.Fakulte);
+
+        if (!string.IsNullOrWhiteSpace(arama))
+        {
+            string temizArama = arama.Trim();
+
+            sorgu = sorgu.Where(a =>
+                a.AkademisyenAd.Contains(temizArama) ||
+                a.AkademisyenSoyad.Contains(temizArama) ||
+                a.AkademisyenEposta.Contains(temizArama));
+        }
+
+        if (bolumId.HasValue && bolumId.Value > 0)
+            sorgu = sorgu.Where(a => a.BolumId == bolumId.Value);
+
+        if (unvan.HasValue && unvan.Value > 0)
+            sorgu = sorgu.Where(a => a.Unvan.ToString() == unvan.Value.ToString());
+
+        int toplamKayit = await sorgu.CountAsync();
+
+        var liste = await sorgu
             .OrderBy(a => a.AkademisyenAd)
             .ThenBy(a => a.AkademisyenSoyad)
+            .Skip((sayfa - 1) * sayfaBoyutu)
+            .Take(sayfaBoyutu)
             .ToListAsync();
 
-        return View(akademisyenler);
-    }
+        ViewBag.Sayfa       = sayfa;
+        ViewBag.ToplamSayfa = (int)Math.Ceiling((double)toplamKayit / sayfaBoyutu);
+        ViewBag.ToplamKayit = toplamKayit;
 
+        ViewBag.Arama         = arama;
+        ViewBag.SeciliBolum   = bolumId;
+        ViewBag.SeciliUnvan   = unvan;
+
+        await BolumListesiniHazirlaAsync(bolumId);
+
+        return View(liste);
+
+    }
+        
     // ══════════════════════════════════════════════════════
     //  2) YENİ KAYIT FORMU
     // ══════════════════════════════════════════════════════

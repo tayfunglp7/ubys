@@ -359,6 +359,17 @@ namespace ubys.Migrations
                         .IsUnique();
 
                     b.ToTable("Kullanicilar");
+
+                    b.HasData(
+                        new
+                        {
+                            KullaniciId = 1L,
+                            AdSoyad = "Sistem Yöneticisi",
+                            AktifMi = true,
+                            CreatedDate = new DateTime(2026, 1, 1, 9, 0, 0, 0, DateTimeKind.Unspecified),
+                            KullaniciAdi = "admin",
+                            SifreHash = "616D9E5D15FD6C71B02D68E2F42838C4BE3F7F7101533390CC66C554C18603C9"
+                        });
                 });
 
             modelBuilder.Entity("UBYS.Models.Ogrenci", b =>

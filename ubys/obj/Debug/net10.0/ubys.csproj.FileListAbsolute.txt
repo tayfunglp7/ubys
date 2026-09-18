@@ -230,3 +230,9 @@ C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\obj\Debug\net10.0\refint\ubys.dll
 C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\obj\Debug\net10.0\ubys.pdb
 C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\obj\Debug\net10.0\ubys.genruntimeconfig.cache
 C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\obj\Debug\net10.0\ref\ubys.dll
+C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\bin\Debug\net10.0\publish\web.config
+C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\bin\Debug\net10.0\publish\appsettings.Development.json
+C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\bin\Debug\net10.0\publish\appsettings.json
+C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\bin\Debug\net10.0\publish\ubys.deps.json
+C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\bin\Debug\net10.0\publish\ubys.runtimeconfig.json
+C:\Users\tayfu\OneDrive\Belgeler\dev\ubys\ubys\bin\Debug\net10.0\publish\ubys.staticwebassets.endpoints.json
